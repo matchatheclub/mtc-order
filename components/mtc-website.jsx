@@ -61,7 +61,7 @@ const STR = {
     total: "Tổng cộng",
     tabMenu: "Menu",
     tabAbout: "Giới thiệu",
-    tabLocation: "Ghé thăm",
+    tabLocation: "Location",
     takeaway: "Pick-up tại quán",
     delivery: "Delivery",
     deliveryAddress: "Địa chỉ giao hàng",
