@@ -1127,29 +1127,42 @@ export default function App() {
                   <input value={orderInfo.phone} onChange={(e) => setOrderInfo({ ...orderInfo, phone: e.target.value })} style={inputStyle} placeholder="09xx xxx xxx" />
                 </div>
                 <div>
-                  <div style={fieldLabel}>{t.method}</div>
-                  <div style={{ display: "flex", gap: 8 }}>
-                    {[t.takeaway, t.dineIn, t.delivery].map((m) => (
-                      <button
-                        key={m}
-                        className="btn"
-                        onClick={() => setOrderInfo({ ...orderInfo, method: m })}
-                        style={{
-                          flex: 1,
-                          padding: 9,
-                          borderRadius: 10,
-                          border: `1.5px solid ${C.green}`,
-                          background: orderInfo.method === m ? C.green : "transparent",
-                          color: orderInfo.method === m ? C.cream : C.greenDark,
-                          fontSize: 12,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {m}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+  <div style={fieldLabel}>{t.method}</div>
+
+  <div style={{ display: "flex", gap: 12 }}>
+    {[t.takeaway, t.delivery].map((m) => (
+      <button
+        key={m}
+        className="btn"
+        onClick={() =>
+          setOrderInfo({
+            ...orderInfo,
+            method: m,
+          })
+        }
+        style={{
+          flex: 1,
+          padding: 14,
+          borderRadius: 14,
+          border: `1.5px solid ${C.green}`,
+          background:
+            orderInfo.method === m
+              ? C.green
+              : "transparent",
+          color:
+            orderInfo.method === m
+              ? C.cream
+              : C.greenDark,
+          fontSize: 14,
+          fontWeight: 600,
+          lineHeight: 1.4,
+        }}
+      >
+        {m}
+      </button>
+    ))}
+  </div>
+</div>
                 {orderInfo.method === t.delivery && (
                   <div>
                     <div style={fieldLabel}>{t.deliveryAddress}</div>
