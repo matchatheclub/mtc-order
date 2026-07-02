@@ -56,6 +56,7 @@ const STR = {
     chooseSnack: "Chọn 1 bánh bất kỳ",
     chooseDrink1: "Chọn matcha thứ 1",
     chooseDrink2: "Chọn matcha thứ 2",
+    chooseDrink3: "Chọn matcha thứ 3",
     freeTea: "Trà trái cây tặng kèm",
     comboDiscount: "Giảm",
     comboFree: "Tặng",
@@ -90,7 +91,7 @@ const STR = {
     noResults: "Không tìm thấy món phù hợp.",
     remove: "Xóa",
     included: "miễn phí",
-    heroTag: "Matcha, cà phê và trà dành cho dân văn phòng và người làm sáng tạo — những ly đồ uống chất lượng để nạp năng lượng, làm mới tinh thần và tận hưởng những niềm vui nhỏ trong ngày.",
+    heroTag: "Matcha, cà phê và trà pha thủ công — những ly đồ uống chất lượng để nạp năng lượng, làm mới tinh thần và tận hưởng những niềm vui nhỏ trong ngày.",
     heroSub: "A little more joy every day, in a single cup."
   },
   en: {
@@ -116,6 +117,7 @@ const STR = {
     chooseSnack: "Choose any 1 snack",
     chooseDrink1: "Choose matcha #1",
     chooseDrink2: "Choose matcha #2",
+    chooseDrink3: "Choose matcha #3",
     freeTea: "Free fruit tea",
     comboDiscount: "Off",
     comboFree: "Free",
@@ -408,7 +410,7 @@ const MENU_ITEMS = [
     name: { en: "Breakfast Combo", vi: "Breakfast Combo" },
     desc: {
       en: "Pick any 1 drink + any 1 snack — get 10k off.",
-      vi: "Combo chọn 1 nước và 1 bánh bất kì, được giảm 10K.",
+      vi: "Combo chọn 1 nước và 1 bánh bất kì. OFF 10K.",
     },
   },
   {
@@ -418,8 +420,8 @@ const MENU_ITEMS = [
     comboType: "teambreak",
     name: { en: "Team Break Combo", vi: "Team Break Combo" },
     desc: {
-      en: "2 matcha drinks — get 1 fruit tea free.",
-      vi: "Combo 2 matcha tặng 1 trà trái cây.",
+      en: "3 matcha drinks — get 1 fruit tea free.",
+      vi: "Combo 3 matcha tặng 1 trà trái cây.",
     },
   },
 ];
@@ -614,15 +616,20 @@ export default function App() {
     if (item.isCombo) {
       if (item.comboType === "breakfast") {
         setCombo({ drinkId: DRINK_ITEMS[0]?.id, drinkSize: "M", snackId: SNACK_ITEMS[0]?.id });
-      } else if (item.comboType === "teambreak") {
-        setCombo({
-          drink1Id: MATCHA_ITEMS[0]?.id,
-          drink1Size: "M",
-          drink2Id: MATCHA_ITEMS[1]?.id || MATCHA_ITEMS[0]?.id,
-          drink2Size: "M",
-          freeTeaId: FREE_TEA_ITEMS[0]?.id,
-        });
-      }
+      } } else if (item.comboType === "teambreak") {
+  setCombo({
+    drink1Id: MATCHA_ITEMS[0]?.id,
+    drink1Size: "M",
+
+    drink2Id: MATCHA_ITEMS[1]?.id || MATCHA_ITEMS[0]?.id,
+    drink2Size: "M",
+
+    drink3Id: MATCHA_ITEMS[2]?.id || MATCHA_ITEMS[0]?.id,
+    drink3Size: "M",
+
+    freeTeaId: FREE_TEA_ITEMS[0]?.id,
+  });
+}
     } else {
       setCombo(null);
     }
@@ -661,44 +668,76 @@ export default function App() {
   }
 
   function confirmComboAdd() {
-    if (!combo) return;
-    let composedName, unitPrice;
-    if (detailItem.comboType === "breakfast") {
-      const drink = findItem(combo.drinkId);
-      const snack = findItem(combo.snackId);
-      if (!drink || !snack) return;
-      const drinkPrice = drink.sizes[combo.drinkSize];
-      unitPrice = drinkPrice + snack.price - BREAKFAST_COMBO_DISCOUNT;
-      composedName = `${detailItem.name[lang]} (${drink.name[lang]} ${combo.drinkSize} + ${snack.name[lang]}, -${BREAKFAST_COMBO_DISCOUNT}k)`;
-    } else {
-      const drink1 = findItem(combo.drink1Id);
-      const drink2 = findItem(combo.drink2Id);
-      const freeTea = findItem(combo.freeTeaId);
-      if (!drink1 || !drink2 || !freeTea) return;
-      unitPrice = drink1.sizes[combo.drink1Size] + drink2.sizes[combo.drink2Size];
-      const freeLabel = lang === "vi" ? "tặng" : "free";
-      composedName = `${detailItem.name[lang]} (${drink1.name[lang]} ${combo.drink1Size} + ${drink2.name[lang]} ${combo.drink2Size} + ${freeTea.name[lang]} ${freeLabel})`;
-    }
-    const sweetness = getSweetness(detailSweetness);
-    const ice = getIce(detailIce);
-    setCart((prev) => [
-      ...prev,
-      {
-        key: `${detailItem.id}-${JSON.stringify(combo)}-${detailSweetness}-${detailIce}-${Date.now()}`,
-        itemId: detailItem.id,
-        name: composedName,
-        size: null,
-        unitPrice,
-        blend: null,
-        sweetness,
-        ice,
-        addons: [],
-        qty: detailQty,
-      },
-    ]);
-    setDetailItem(null);
-    setCombo(null);
+  if (!combo) return;
+
+  let composedName, unitPrice;
+
+  if (detailItem.comboType === "breakfast") {
+    const drink = findItem(combo.drinkId);
+    const snack = findItem(combo.snackId);
+
+    if (!drink || !snack) return;
+
+    const drinkPrice = drink.sizes[combo.drinkSize];
+
+    unitPrice =
+      drinkPrice +
+      snack.price -
+      BREAKFAST_COMBO_DISCOUNT;
+
+    composedName =
+      `${detailItem.name[lang]} (` +
+      `${drink.name[lang]} ${combo.drinkSize} + ` +
+      `${snack.name[lang]}, ` +
+      `-${BREAKFAST_COMBO_DISCOUNT}k)`;
+
+  } else {
+
+    const drink1 = findItem(combo.drink1Id);
+    const drink2 = findItem(combo.drink2Id);
+    const drink3 = findItem(combo.drink3Id);
+    const freeTea = findItem(combo.freeTeaId);
+
+    if (!drink1 || !drink2 || !drink3 || !freeTea) return;
+
+    unitPrice =
+      drink1.sizes[combo.drink1Size] +
+      drink2.sizes[combo.drink2Size] +
+      drink3.sizes[combo.drink3Size];
+
+    const freeLabel =
+      lang === "vi" ? "tặng" : "free";
+
+    composedName =
+      `${detailItem.name[lang]} (` +
+      `${drink1.name[lang]} ${combo.drink1Size} + ` +
+      `${drink2.name[lang]} ${combo.drink2Size} + ` +
+      `${drink3.name[lang]} ${combo.drink3Size} + ` +
+      `${freeTea.name[lang]} ${freeLabel})`;
   }
+
+  const sweetness = getSweetness(detailSweetness);
+  const ice = getIce(detailIce);
+
+  setCart((prev) => [
+    ...prev,
+    {
+      key: `${detailItem.id}-${JSON.stringify(combo)}-${detailSweetness}-${detailIce}-${Date.now()}`,
+      itemId: detailItem.id,
+      name: composedName,
+      size: null,
+      unitPrice,
+      blend: null,
+      sweetness,
+      ice,
+      addons: [],
+      qty: detailQty,
+    },
+  ]);
+
+  setDetailItem(null);
+  setCombo(null);
+}
 
   function removeLine(key) {
     setCart((prev) => prev.filter((c) => c.key !== key));
@@ -788,18 +827,32 @@ export default function App() {
   }
 
   const detailPreviewTotal = detailItem
-    ? detailItem.isCombo
-      ? combo
-        ? (detailItem.comboType === "breakfast"
-            ? (findItem(combo.drinkId)?.sizes[combo.drinkSize] || 0) + (findItem(combo.snackId)?.price || 0) - BREAKFAST_COMBO_DISCOUNT
-            : (findItem(combo.drink1Id)?.sizes[combo.drink1Size] || 0) + (findItem(combo.drink2Id)?.sizes[combo.drink2Size] || 0)) *
-          detailQty
-        : 0
-      : ((detailItem.sizes ? detailItem.sizes[detailSize] : detailItem.price) +
-          detailAddons.reduce((s, a) => s + (a.price[detailSize] ?? 0), 0) +
-          (detailItem.hasMatcha ? getBlend(detailBlend).price[detailSize] : 0)) *
-        detailQty
-    : 0;
+  ? detailItem.isCombo
+    ? combo
+      ? (
+          detailItem.comboType === "breakfast"
+            ? (findItem(combo.drinkId)?.sizes[combo.drinkSize] || 0) +
+              (findItem(combo.snackId)?.price || 0) -
+              BREAKFAST_COMBO_DISCOUNT
+
+            : (findItem(combo.drink1Id)?.sizes[combo.drink1Size] || 0) +
+              (findItem(combo.drink2Id)?.sizes[combo.drink2Size] || 0) +
+              (findItem(combo.drink3Id)?.sizes[combo.drink3Size] || 0)
+        ) * detailQty
+      : 0
+    : (
+        (detailItem.sizes
+          ? detailItem.sizes[detailSize]
+          : detailItem.price) +
+        detailAddons.reduce(
+          (s, a) => s + (a.price[detailSize] ?? 0),
+          0
+        ) +
+        (detailItem.hasMatcha
+          ? getBlend(detailBlend).price[detailSize]
+          : 0)
+      ) * detailQty
+  : 0;
 
   return (
     <div style={{ fontFamily: "'Inter', sans-serif", background: C.beige, color: C.greenDark, minHeight: "100vh" }}>
@@ -1211,61 +1264,109 @@ export default function App() {
           )}
 
           {detailItem.isCombo && combo && detailItem.comboType === "teambreak" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 18 }}>
-              {[1, 2].map((n) => (
-                <div key={n}>
-                  <div style={fieldLabel}>{n === 1 ? t.chooseDrink1 : t.chooseDrink2}</div>
-                  <select
-                    value={n === 1 ? combo.drink1Id : combo.drink2Id}
-                    onChange={(e) => setCombo({ ...combo, [n === 1 ? "drink1Id" : "drink2Id"]: e.target.value })}
-                    style={selectStyle}
-                  >
-                    {MATCHA_ITEMS.map((d) => (
-                      <option key={d.id} value={d.id}>
-                        {d.name[lang]}
-                      </option>
-                    ))}
-                  </select>
-                  <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                    {["M", "L"].map((sz) => (
-                      <button
-                        key={sz}
-                        className="btn"
-                        onClick={() => setCombo({ ...combo, [n === 1 ? "drink1Size" : "drink2Size"]: sz })}
-                        style={{
-                          flex: 1,
-                          padding: 8,
-                          borderRadius: 10,
-                          border: `1.5px solid ${C.green}`,
-                          background: (n === 1 ? combo.drink1Size : combo.drink2Size) === sz ? C.green : "transparent",
-                          color: (n === 1 ? combo.drink1Size : combo.drink2Size) === sz ? C.cream : C.greenDark,
-                          fontWeight: 600,
-                          fontSize: 12.5,
-                        }}
-                      >
-                        {sz}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              <div>
-                <div style={fieldLabel}>{t.freeTea}</div>
-                <select
-                  value={combo.freeTeaId}
-                  onChange={(e) => setCombo({ ...combo, freeTeaId: e.target.value })}
-                  style={selectStyle}
-                >
-                  {FREE_TEA_ITEMS.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name[lang]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 14,
+      marginBottom: 18,
+    }}
+  >
+    {[1, 2, 3].map((n) => (
+      <div key={n}>
 
+        <div style={fieldLabel}>
+          {n === 1
+            ? t.chooseDrink1
+            : n === 2
+            ? t.chooseDrink2
+            : "Matcha 3"}
+        </div>
+
+        <select
+          value={combo[`drink${n}Id`]}
+          onChange={(e) =>
+            setCombo({
+              ...combo,
+              [`drink${n}Id`]: e.target.value,
+            })
+          }
+          style={selectStyle}
+        >
+          {MATCHA_ITEMS.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.name[lang]}
+            </option>
+          ))}
+        </select>
+
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            marginTop: 8,
+          }}
+        >
+          {["M", "L"].map((sz) => (
+            <button
+              key={sz}
+              className="btn"
+              onClick={() =>
+                setCombo({
+                  ...combo,
+                  [`drink${n}Size`]: sz,
+                })
+              }
+              style={{
+                flex: 1,
+                padding: 8,
+                borderRadius: 10,
+                border: `1.5px solid ${C.green}`,
+                background:
+                  combo[`drink${n}Size`] === sz
+                    ? C.green
+                    : "transparent",
+                color:
+                  combo[`drink${n}Size`] === sz
+                    ? C.cream
+                    : C.greenDark,
+                fontWeight: 600,
+                fontSize: 12.5,
+              }}
+            >
+              {sz}
+            </button>
+          ))}
+        </div>
+
+      </div>
+    ))}
+
+    <div>
+      <div style={fieldLabel}>
+        {t.freeTea}
+      </div>
+
+      <select
+        value={combo.freeTeaId}
+        onChange={(e) =>
+          setCombo({
+            ...combo,
+            freeTeaId: e.target.value,
+          })
+        }
+        style={selectStyle}
+      >
+        {FREE_TEA_ITEMS.map((f) => (
+          <option key={f.id} value={f.id}>
+            {f.name[lang]}
+          </option>
+        ))}
+      </select>
+    </div>
+
+  </div>
+)}
           {detailItem.sizes && (
             <div style={{ marginBottom: 18 }}>
               <div style={fieldLabel}>{t.size}</div>
