@@ -74,7 +74,7 @@ const STR = {
     needHelp: "Cần hỗ trợ? Gọi cho quán",
     backupTitle: "Phòng khi cần, bạn cũng có thể",
     sending: "Đang gửi đơn...",
-    story: "about us",
+    story: "our story",
     address: "Địa chỉ",
     hours: "Giờ mở cửa",
     ig: "Instagram",
