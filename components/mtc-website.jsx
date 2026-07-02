@@ -111,7 +111,7 @@ const STR = {
     total: "Total",
     tabMenu: "Menu",
     tabAbout: "About",
-    tabLocation: "Visit",
+    tabLocation: "Location",
     takeaway: "Pick-up at store",
     delivery: "Delivery",
     deliveryAddress: "Delivery address",
