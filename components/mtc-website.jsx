@@ -90,7 +90,8 @@ const STR = {
     noResults: "Không tìm thấy món phù hợp.",
     remove: "Xóa",
     included: "miễn phí",
-    heroTag: "A modern matcha takeaway concept designed for office rituals, creative breaks, and mindful exploration.",
+    heroTag: "Matcha, cà phê và trà dành cho dân văn phòng và người làm sáng tạo — những ly đồ uống chất lượng để nạp năng lượng, làm mới tinh thần và tận hưởng những niềm vui nhỏ trong ngày.",
+    heroSub: "A little more joy every day, in a single cup."
   },
   en: {
     search: "Search dishes...",
@@ -149,7 +150,7 @@ const STR = {
     noResults: "No dishes found.",
     remove: "Remove",
     included: "included",
-    heroTag: "A modern ritual-driven takeaway concept for urban creatives.",
+    heroTag: "A modern matcha & takeaway drinks concept designed for office rituals, creative breaks, and mindful exploration.",
     heroSub: "A little more joy every day, in a single cup.",
   },
 };
