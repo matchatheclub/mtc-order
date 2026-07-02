@@ -74,15 +74,14 @@ const STR = {
     needHelp: "Cần hỗ trợ? Gọi cho quán",
     backupTitle: "Phòng khi cần, bạn cũng có thể",
     sending: "Đang gửi đơn...",
-    story: "câu chuyện của chúng tôi",
+    story: "about us",
     address: "Địa chỉ",
     hours: "Giờ mở cửa",
     ig: "Instagram",
     noResults: "Không tìm thấy món phù hợp.",
     remove: "Xóa",
     included: "miễn phí",
-    heroTag: "A modern ritual-driven takeaway concept for urban creatives.",
-    heroSub: "Một chút niềm vui mỗi ngày, gói gọn trong một ly trà.",
+    heroTag: "A modern matcha takeaway concept designed for office rituals, creative breaks, and mindful exploration.",
   },
   en: {
     search: "Search dishes...",
@@ -804,11 +803,16 @@ export default function App() {
           </p>
           <div style={{ background: C.green, color: C.cream, borderRadius: 16, padding: 18, position: "relative", overflow: "hidden" }}>
             <Flower size={28} color="#ffffec44" style={{ position: "absolute", top: 8, right: 10 }} />
-            <p className="handwrite" style={{ fontSize: 19, lineHeight: 1.5, margin: 0 }}>
-              {lang === "vi"
-                ? "Thêm một chút niềm vui & bất ngờ vào cuộc sống thường ngày, qua những nghi thức nhỏ mỗi ngày. 🍵✨"
-                : "To add a little more joy & spontaneity into everyday life through small daily rituals. 🍵✨"}
-            </p>
+            <p
+  className="handwrite"
+  style={{
+    fontSize: 19,
+    lineHeight: 1.5,
+    margin: 0,
+  }}
+>
+  To add a little more joy & spontaneity into everyday life through small daily rituals. 🍵✨
+</p>
           </div>
         </main>
       )}
