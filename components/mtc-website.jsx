@@ -837,21 +837,60 @@ export default function App() {
               <div style={{ color: "#3a4a3f" }}>@matchatheclub</div>
             </div>
           </div>
-          <div
-            style={{
-              marginTop: 22,
-              height: 170,
-              borderRadius: 16,
-              background: `${C.green}22`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 13,
-              color: C.greenDark,
-            }}
-          >
-            [ {lang === "vi" ? "bản đồ" : "map"} ]
-          </div>
+          <a
+  href="https://maps.app.goo.gl/YmAL1rQdPT9RHNoS8"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ textDecoration: "none" }}
+>
+  <div
+    style={{
+      marginTop: 22,
+      height: 170,
+      borderRadius: 16,
+      background: `${C.green}15`,
+      border: `1px solid ${C.green}40`,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 8,
+      color: C.greenDark,
+      cursor: "pointer",
+    }}
+  >
+    <div style={{ fontSize: 28 }}>📍</div>
+
+    <div
+      style={{
+        fontWeight: 700,
+        fontSize: 16,
+      }}
+    >
+      Matcha The Club
+    </div>
+
+    <div
+      style={{
+        fontSize: 13,
+        opacity: 0.8,
+      }}
+    >
+      87 Trương Định, Xuân Hoà (D3)
+    </div>
+
+    <div
+      style={{
+        fontSize: 12,
+        color: C.green,
+      }}
+    >
+      {lang === "vi"
+        ? "Nhấn để mở Google Maps"
+        : "Open in Google Maps"}
+    </div>
+  </div>
+</a>
         </main>
       )}
 
