@@ -35,7 +35,7 @@ const SHOP_PHONE_TEL = "+84899046468";
 const STR = {
   vi: {
     search: "Tìm món...",
-    cart: "Giỏ hàng",
+    cart: "Review Order",
     items: "món",
     empty: "Giỏ hàng đang trống.",
     addToCart: "Thêm vào giỏ",
@@ -46,7 +46,7 @@ const STR = {
     ice: "Đá",
     qty: "Số lượng",
     checkout: "Đặt hàng",
-    orderInfo: "Thông tin đặt hàng",
+    orderInfo: "Thông tin order",
     name: "Họ tên",
     phone: "Số điện thoại",
     method: "Hình thức nhận",
